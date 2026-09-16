@@ -1,4 +1,4 @@
-# Avantaria Men's Clothing Store CMS
+# Avantaria Women's Clothing Store CMS
 
 This is a content management system (CMS) for Avantaria, a men's clothing store.
 The CMS allows store administrators to manage products, categories, and orders efficiently.

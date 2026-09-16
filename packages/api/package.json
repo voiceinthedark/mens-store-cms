@@ -1,0 +1,15 @@
+{
+  "name": "@store/api",
+  "version": "1.0.0",
+  "description": "Avantaria women's clothing store API",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+    "@store/db": "*",
+    "express": "^4.18.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

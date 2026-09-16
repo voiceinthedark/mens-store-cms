@@ -1,0 +1,26 @@
+{
+  "name": "@store/db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prisma": "prisma",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "studio": "prisma studio"
+  },
+  "keywords": [
+    "db",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "Firas Abbas <darkrisingforce@gmail.com",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@prisma/client": "^7.10.0"
+  },
+  "devDependencies": {
+    "prisma": "^8.0.0-rc.15"
+  }
+}

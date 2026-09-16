@@ -1,0 +1,17 @@
+{
+  "name": "@store/types",
+  "version": "1.0.0",
+  "description": "TypeScript types for the Avantaria women's clothing store project",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "typescript",
+    "types",
+    "avantaria"
+  ],
+  "author": "Firas Abbas <darkrisingforce@gmail.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {},
+  "devDependencies": {}
+}
