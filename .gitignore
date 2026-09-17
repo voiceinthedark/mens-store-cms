@@ -1,3 +1,5 @@
 /.env
 /node_modules
 /packages/api/.env
+/packages/db/dist
+/packages/db/node_modules

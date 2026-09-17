@@ -1,26 +1,28 @@
 {
   "name": "@store/db",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "prisma": "prisma",
-    "generate": "prisma generate",
-    "migrate": "prisma migrate dev",
-    "studio": "prisma studio"
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
-  "keywords": [
-    "db",
-    "prisma",
-    "postgresql"
-  ],
-  "author": "Firas Abbas <darkrisingforce@gmail.com",
-  "license": "ISC",
-  "type": "commonjs",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "db:generate": "npx prisma generate",
+    "db:push": "npx prisma db push",
+    "db:migrate": "npx prisma migrate dev"
+  },
   "dependencies": {
-    "@prisma/client": "^7.10.0"
+    "@prisma/client": "^5.20.0"
   },
   "devDependencies": {
-    "prisma": "^8.0.0-rc.15"
+    "@types/node": "^22.20.3",
+    "prisma": "^5.20.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0"
   }
 }

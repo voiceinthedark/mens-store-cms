@@ -1,10 +1,12 @@
 // filepath: packages/api/src/routes/auth.routes.ts
 
-import { Router } from 'express';
-import { AuthController } from '../controllers/auth.controller';
+import { Router } from "express";
+import { AuthController } from "../controllers/auth.controller";
+import { validate } from "../middlewares/validate.middleware";
+import { registerSchema, loginSchema } from "../schemas/auth.schema";
 
 const router = Router();
-router.post('/register', AuthController.register);
-router.post('/login', AuthController.login);
+router.post("/register", validate(registerSchema), AuthController.register);
+router.post("/login", validate(loginSchema), AuthController.login);
 
 export default router;

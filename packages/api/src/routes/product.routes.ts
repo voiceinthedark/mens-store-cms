@@ -1,25 +1,38 @@
-// filepath: packages/api/src/routes/product.routes.ts
-
-import { Router } from 'express';
-import { ProductService } from '../services/product.service';
-import { authenticate, authorize } from '../middlewares/auth.middleware';
+import { Router } from "express";
+import { ProductService } from "../services/product.service";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
+import { validate } from "../middlewares/validate.middleware";
+import {
+  createProductSchema,
+  getProductBySlugSchema,
+} from "../schemas/product.schema";
 
 const router = Router();
 
-// Public route for storefront
-router.get('/', async (req, res) => {
-  const products = await ProductService.getAllProducts();
-  res.json(products);
-});
+// Public route: Get product by slug
+router.get(
+  "/:slug",
+  validate(getProductBySlugSchema),
+  async (req: any, res: any) => {
+    const product = await ProductService.getSingleProduct(req.params.slug);
+    res.json(product);
+  },
+);
 
-// Admin-protected route for CMS management
-router.post('/', authenticate, authorize(['ADMIN']), async (req, res) => {
-  try {
-    const product = await ProductService.createProduct(req.body);
-    res.status(201).json(product);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
-  }
-});
+// Protected route: Admin create product
+router.post(
+  "/",
+  authenticate,
+  authorize(["ADMIN"]),
+  validate(createProductSchema),
+  async (req, res) => {
+    try {
+      const product = await ProductService.createProduct(req.body);
+      res.status(201).json(product);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  },
+);
 
 export default router;

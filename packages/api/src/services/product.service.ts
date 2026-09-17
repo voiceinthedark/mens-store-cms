@@ -1,6 +1,6 @@
 // filepath: packages/api/src/services/product.service.ts
 
-import { prisma } from '@store/db';
+import { prisma } from "@store/db";
 
 export class ProductService {
   static async getAllProducts() {
@@ -23,6 +23,17 @@ export class ProductService {
     return prisma.product.create({
       data,
       include: { category: true },
+    });
+  }
+
+  static async getSingleProduct(slug: string) {
+    return prisma.product.findUnique({
+      where: { slug },
+      include: {
+        category: true,
+        variants: true,
+        images: true,
+      },
     });
   }
 }
