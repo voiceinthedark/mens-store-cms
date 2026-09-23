@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { ProductService } from "../services/product.service";
 import { authenticate, authorize } from "../middlewares/auth.middleware";
 import { validate } from "../middlewares/validate.middleware";
@@ -25,7 +25,7 @@ router.post(
   authenticate,
   authorize(["ADMIN"]),
   validate(createProductSchema),
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     try {
       const product = await ProductService.createProduct(req.body);
       res.status(201).json(product);

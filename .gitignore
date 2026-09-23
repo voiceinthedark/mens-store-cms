@@ -3,3 +3,5 @@
 /packages/api/.env
 /packages/db/dist
 /packages/db/node_modules
+/packages/types/dist
+/packages/types/node_modules/zod

@@ -1,17 +1,24 @@
 {
   "name": "@store/types",
   "version": "1.0.0",
-  "description": "TypeScript types for the Avantaria women's clothing store project",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [
-    "typescript",
-    "types",
-    "avantaria"
-  ],
-  "author": "Firas Abbas <darkrisingforce@gmail.com>",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {},
-  "devDependencies": {}
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "zod": "^3.23.0"
+  },
+  "peerDependencies": {
+    "zod": "^3.23.0"
+  }
 }

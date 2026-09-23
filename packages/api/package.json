@@ -6,7 +6,9 @@
   "scripts": {},
   "dependencies": {
     "@store/db": "*",
+    "@store/types": "*",
     "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^4.22.3",
     "pg": "^8.23.0",
