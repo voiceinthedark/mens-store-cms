@@ -22,6 +22,15 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 
+// Root route
+app.get("/", (_, res) => {
+  res.send("Welcome to the API");
+});
+
+app.get("/health", (_, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

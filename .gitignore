@@ -6,3 +6,4 @@
 /packages/types/dist
 /packages/types/node_modules/zod
 /.turbo/daemon
+/packages/db/.env
