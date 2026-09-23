@@ -5,3 +5,4 @@
 /packages/db/node_modules
 /packages/types/dist
 /packages/types/node_modules/zod
+/.turbo/daemon
