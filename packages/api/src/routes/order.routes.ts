@@ -6,6 +6,7 @@ import { authenticate, authorize } from "../middlewares/auth.middleware";
 import { validate } from "../middlewares/validate.middleware";
 import {
   createOrderSchema,
+  checkoutSchema,
   getOrderByIdSchema,
   updateOrderStatusSchema,
 } from "../schemas/order.schema";
@@ -17,6 +18,9 @@ router.use(authenticate);
 
 // Customer: create a new order (pay-on-delivery)
 router.post("/", validate(createOrderSchema), OrderController.create);
+
+// Customer: checkout using items currently in the cart
+router.post("/checkout", validate(checkoutSchema), OrderController.checkout);
 
 // Customer: view own order history
 router.get("/mine", OrderController.listMine);
