@@ -189,6 +189,18 @@ export class OrderService {
         throw new Error("Order not found");
       }
 
+      // Prevent only status changes after delivery and cancellation
+      const isFinalized =
+        order.status === "DELIVERED" || order.status === "CANCELLED";
+      const isChangingStatus =
+        data.status !== undefined && data.status !== order.status;
+
+      if (isFinalized && isChangingStatus) {
+        throw new Error(
+          `Cannot change the status of an order that is already ${order.status.toLowerCase()}`,
+        );
+      }
+
       const isCancelling =
         data.status === "CANCELLED" && order.status !== "CANCELLED";
 
