@@ -4,6 +4,8 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 import productRoutes from "./routes/product.routes";
+import uploadRoutes from "./routes/upload.routes";
+import { notFoundHandler, errorHandler } from "./middlewares/error.middleware";
 
 const app = express();
 
@@ -21,6 +23,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Root route
 app.get("/", (_, res) => {
@@ -30,6 +33,12 @@ app.get("/", (_, res) => {
 app.get("/health", (_, res) => {
   res.status(200).json({ status: "ok" });
 });
+
+// 404 handler for unmatched routes (must come after all routes)
+app.use(notFoundHandler);
+
+// Global error handler (must be registered last)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

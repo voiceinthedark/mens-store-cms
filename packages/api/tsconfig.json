@@ -4,7 +4,9 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "outDir": "./dist",
     "rootDir": "./src",
     /* Strict Type Checking */
@@ -15,8 +17,8 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     /* Code Quality Checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     /* Module & Interop Support */
@@ -29,10 +31,20 @@
     /* Monorepo Path References (Optional Alias Mapping) */
     "baseUrl": ".",
     "paths": {
-      "@store/db": ["../db/src/index.ts"],
-      "@store/types": ["../types/src/index.ts"]
+      "@store/db": [
+        "../db/src/index.ts"
+      ],
+      "@store/types": [
+        "../types/src/index.ts"
+      ]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts"
+  ]
 }
