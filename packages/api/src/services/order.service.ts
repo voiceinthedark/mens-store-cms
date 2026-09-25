@@ -172,18 +172,39 @@ export class OrderService {
     return order;
   }
 
+  /**
+   * Updates order/payment status. If the order is being cancelled
+   * (and wasn't already cancelled), restores stock for each item.
+   */
   static async updateOrderStatus(
     id: string,
     data: { status?: string; paymentStatus?: string },
   ) {
-    const order = await prisma.order.findUnique({ where: { id } });
-    if (!order) {
-      throw new Error("Order not found");
-    }
+    return prisma.$transaction(async (tx) => {
+      const order = await tx.order.findUnique({
+        where: { id },
+        include: { items: true },
+      });
+      if (!order) {
+        throw new Error("Order not found");
+      }
 
-    return prisma.order.update({
-      where: { id },
-      data: data as any,
+      const isCancelling =
+        data.status === "CANCELLED" && order.status !== "CANCELLED";
+
+      if (isCancelling) {
+        for (const item of order.items) {
+          await tx.productVariant.update({
+            where: { id: item.variantId },
+            data: { stockQty: { increment: item.quantity } },
+          });
+        }
+      }
+
+      return tx.order.update({
+        where: { id },
+        data: data as any,
+      });
     });
   }
 }
