@@ -1,6 +1,6 @@
 {
   "name": "@store/db",
-  "version": "0.12.1",
+  "version": "0.13.03",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

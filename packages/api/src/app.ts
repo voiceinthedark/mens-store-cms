@@ -5,6 +5,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 import productRoutes from "./routes/product.routes";
 import uploadRoutes from "./routes/upload.routes";
+import orderRoutes from "./routes/order.routes";
 import { notFoundHandler, errorHandler } from "./middlewares/error.middleware";
 
 const app = express();
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Root route
 app.get("/", (_, res) => {

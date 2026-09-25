@@ -31,16 +31,20 @@ enum PaymentStatus {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String    @id @default(uuid())
+  email        String    @unique
   passwordHash String
   firstName    String
   lastName     String
   phone        String?
-  role         Role     @default(CUSTOMER)
+  role         Role      @default(CUSTOMER)
   orders       Order[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  addresses    Address[]
+  cart         Cart?
+  wishlist     Wishlist?
+  reviews      Review[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Address {
@@ -56,11 +60,12 @@ model Address {
   postalCode String?
   country    String
   isDefault  Boolean @default(false)
+  orders     Order[]
 }
 
 model Cart {
   id        String     @id @default(uuid())
-  userId    String
+  userId    String     @unique
   user      User       @relation(fields: [userId], references: [id])
   items     CartItem[]
   createdAt DateTime   @default(now())
@@ -99,15 +104,18 @@ model Product {
 }
 
 model ProductVariant {
-  id         String      @id @default(uuid())
-  productId  String
-  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  sku        String      @unique
-  size       String // e.g., "S", "M", "L", "42R"
-  color      String // e.g., "Navy", "Charcoal"
-  stockQty   Int         @default(0)
-  priceDelta Decimal     @default(0.00) @db.Decimal(10, 2)
-  orderItems OrderItem[]
+  id            String         @id @default(uuid())
+  productId     String
+  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku           String         @unique
+  size          String // e.g., "S", "M", "L", "42R"
+  color         String // e.g., "Navy", "Charcoal"
+  stockQty      Int            @default(0)
+  priceDelta    Decimal        @default(0.00) @db.Decimal(10, 2)
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+  wishlistItems WishlistItem[]
+  reviews       Review[]
 
   @@index([productId, size, color], name: "variant_unique_index")
 }
@@ -149,7 +157,7 @@ model OrderItem {
 
 model Wishlist {
   id        String         @id @default(uuid())
-  userId    String
+  userId    String         @unique
   user      User           @relation(fields: [userId], references: [id])
   items     WishlistItem[]
   createdAt DateTime       @default(now())
