@@ -5,7 +5,8 @@ import { prisma } from "@store/db";
 export class ReviewService {
   /**
    * Creates a review for a product variant. A user may only review
-   * a given variant once (enforced here at the application level).
+   * a given variant once (enforced here at the application level),
+   * and only if they have a delivered order containing that variant.
    */
   static async createReview(
     userId: string,
@@ -23,6 +24,18 @@ export class ReviewService {
     });
     if (existing) {
       throw new Error("You have already reviewed this product");
+    }
+
+    const verifiedPurchase = await prisma.orderItem.findFirst({
+      where: {
+        variantId: data.variantId,
+        order: { userId, status: "DELIVERED" },
+      },
+    });
+    if (!verifiedPurchase) {
+      throw new Error(
+        "You can only review products from a delivered order",
+      );
     }
 
     return prisma.review.create({
