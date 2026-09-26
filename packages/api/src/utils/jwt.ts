@@ -1,8 +1,9 @@
 // filepath: packages/api/src/utils/jwt.ts
 
 import jwt from 'jsonwebtoken';
+import { env } from '../config/env';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
+const JWT_SECRET = env.JWT_SECRET;
 const JWT_EXPIRES_IN = '1d';
 
 export interface TokenPayload {

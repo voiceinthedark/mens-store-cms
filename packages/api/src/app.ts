@@ -1,5 +1,6 @@
 // filepath: packages/api/src/app.ts
 
+import { env } from "./config/env";
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
@@ -48,7 +49,7 @@ app.use(notFoundHandler);
 // Global error handler (must be registered last)
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
