@@ -4,12 +4,50 @@ import { prisma } from "@store/db";
 
 export class ProductService {
   static async getAllProducts() {
-    return prisma.product.findMany({
+    const products = await prisma.product.findMany({
       include: {
         category: true,
         variants: true,
         images: true,
       },
+    });
+
+    if (products.length === 0) return products;
+
+    // Map each variantId to its parent productId for a single batched lookup
+    const variantToProduct = new Map<string, string>();
+    for (const product of products) {
+      for (const variant of product.variants) {
+        variantToProduct.set(variant.id, product.id);
+      }
+    }
+
+    const allVariantIds = Array.from(variantToProduct.keys());
+
+    // Single query to fetch every relevant review's rating + variantId
+    const reviews = await prisma.review.findMany({
+      where: { variantId: { in: allVariantIds } },
+      select: { variantId: true, rating: true },
+    });
+
+    // Aggregate ratings per product in-memory (avoids N+1 aggregate queries)
+    const statsByProduct = new Map<string, { sum: number; count: number }>();
+    for (const review of reviews) {
+      const productId = variantToProduct.get(review.variantId);
+      if (!productId) continue;
+      const stats = statsByProduct.get(productId) ?? { sum: 0, count: 0 };
+      stats.sum += review.rating;
+      stats.count += 1;
+      statsByProduct.set(productId, stats);
+    }
+
+    return products.map((product) => {
+      const stats = statsByProduct.get(product.id);
+      return {
+        ...product,
+        averageRating: stats ? stats.sum / stats.count : null,
+        reviewCount: stats?.count ?? 0,
+      };
     });
   }
 
