@@ -8,6 +8,7 @@ import {
   Package,
 } from "lucide-react";
 import { CMSLayout } from "../components/layout/CMSLayout";
+import { Link } from "react-router-dom";
 
 export const DashboardPage: React.FC = () => {
   // Sample KPI metrics (would connect to analytics/order service endpoints)
@@ -118,12 +119,12 @@ export const DashboardPage: React.FC = () => {
               </p>
             </div>
           </div>
-          <a
-            href="/products"
+          <Link
+            to="/products"
             className="text-xs font-semibold text-amber-900 hover:underline flex items-center gap-1"
           >
             Review Stock <ArrowRight size={14} />
-          </a>
+          </Link>
         </div>
 
         {/* Recent Orders Section */}
@@ -132,12 +133,12 @@ export const DashboardPage: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-900">
               Recent Orders
             </h2>
-            <a
-              href="/orders"
+            <Link
+              to="/orders"
               className="text-xs font-semibold text-gray-600 hover:text-black flex items-center gap-1"
             >
               View All <ArrowRight size={14} />
-            </a>
+            </Link>
           </div>
 
           <div className="divide-y divide-gray-100">

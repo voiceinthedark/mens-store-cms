@@ -7,6 +7,7 @@ import {
   Layers,
   ShoppingCart,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface DesktopSideBarProps {
   navItems: { label: string; icon: React.ElementType; href: string }[];
@@ -20,14 +21,14 @@ export const DesktopSideBar: React.FC<DesktopSideBarProps> = ({ navItems }) => {
       </h1>
       <nav className="flex flex-col gap-2">
         {navItems.map((item) => (
-          <a
+          <Link
             key={item.label}
-            href={item.href}
+            to={item.href}
             className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition"
           >
             <item.icon size={20} />
             {item.label}
-          </a>
+          </Link>
         ))}
       </nav>
     </aside>

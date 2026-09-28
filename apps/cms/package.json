@@ -1,7 +1,7 @@
 {
   "name": "cms",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.07.02",
   "type": "module",
   "scripts": {
     "dev": "vite --port 3001",
@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@store/types": "*",
     "@hookform/resolvers": "^5.9.1",
-    "lucide-react": "^1.47.0",
+    "@store/types": "*",
+    "@tailwindcss/vite": "^4.3.3",
+    "lucide-react": "1.48.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-hook-form": "^7.88.0"
+    "react-hook-form": "^7.88.0",
+    "react-router-dom": "^7.1.1",
+    "tailwindcss": "^4.3.3",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",

@@ -12,6 +12,7 @@ import {
 import { MobileTopNavigation } from "../ui/MobileTopNavigation";
 import { MobileSlideOutDrawer } from "../ui/MobileSlideOutDrawer";
 import { DesktopSideBar } from "../ui/DesktopSideBar";
+import { Link } from "react-router-dom";
 
 interface CMSLayoutProps {
   children: React.ReactNode;
@@ -54,14 +55,14 @@ export const CMSLayout: React.FC<CMSLayoutProps> = ({ children }) => {
       {/* Mobile Bottom Navigation Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-2 px-4 z-40">
         {navItems.map((item) => (
-          <a
+          <Link
+            to={item.href}
             key={item.label}
-            href={item.href}
             className="flex flex-col items-center gap-1 text-gray-600 hover:text-black text-xs font-medium"
           >
             <item.icon size={20} />
             {item.label}
-          </a>
+          </Link>
         ))}
       </nav>
     </div>

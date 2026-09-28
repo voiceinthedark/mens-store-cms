@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Upload, Plus, Trash2, ArrowLeft, Check } from "lucide-react";
 import { CMSLayout } from "../components/layout/CMSLayout";
+import { Link } from "react-router-dom";
 
 // Define standard men's apparel sizes
 const MENS_SIZES = [
@@ -143,12 +144,12 @@ export const ProductCreatePage: React.FC = () => {
       <div className="max-w-4xl mx-auto pb-12">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <a
-            href="/products"
+          <Link
+            to="/products"
             className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
           >
             <ArrowLeft size={20} />
-          </a>
+          </Link>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
               Add New Clothing Item

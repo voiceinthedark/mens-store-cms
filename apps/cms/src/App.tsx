@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DashboardPage } from "./pages/Dashboard";
+import { ProductsPage } from "./pages/ProductsPage";
+import { ProductCreatePage } from "./pages/ProductCreatePage";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <DashboardPage />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/products/new" element={<ProductCreatePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

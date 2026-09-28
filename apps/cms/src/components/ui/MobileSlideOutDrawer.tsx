@@ -7,6 +7,7 @@ import {
   Layers,
   ShoppingCart,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface MobileSlideOutDrawerProps {
   navItems: { label: string; icon: React.ElementType; href: string }[];
@@ -31,14 +32,14 @@ export const MobileSlideOutDrawer: React.FC<MobileSlideOutDrawerProps> = ({
         </p>
         <nav className="flex flex-col gap-2">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.label}
-              href={item.href}
+              to={item.href}
               className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium"
             >
               <item.icon size={20} />
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>
