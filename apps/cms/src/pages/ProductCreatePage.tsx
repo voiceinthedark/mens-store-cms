@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Upload, Plus, Trash2, ArrowLeft, Check } from "lucide-react";
 import { CMSLayout } from "../components/layout/CMSLayout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "../api/client";
 
 // Define standard men's apparel sizes
 const MENS_SIZES = [
@@ -50,6 +51,7 @@ const formSchema = z.object({
 type ProductFormData = z.infer<typeof formSchema>;
 
 export const ProductCreatePage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -107,30 +109,18 @@ export const ProductCreatePage: React.FC = () => {
       // 1. First upload images via Multipart API endpoint
       let uploadedUrls: string[] = [];
       if (selectedImages.length > 0) {
-        const formData = new FormData();
-        selectedImages.forEach((img) => formData.append("images", img));
-
-        const uploadRes = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const uploadData = await uploadRes.json();
+        const uploadData = await api.uploadImages(selectedImages);
         uploadedUrls = uploadData.urls;
       }
 
       // 2. Submit Product + Variants + Image URLs payload
-      const response = await fetch("/api/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          images: uploadedUrls,
-        }),
+      await api.createProduct({
+        ...data,
+        images: uploadedUrls,
       });
 
-      if (!response.ok) throw new Error("Failed to create product");
-
       setIsSuccess(true);
+      setTimeout(() => navigate("/products"), 1200);
     } catch (err) {
       console.error(err);
       alert("Error creating product. Check console logs.");
@@ -456,7 +446,7 @@ export const ProductCreatePage: React.FC = () => {
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
-              onClick={() => (window.location.href = "/products")}
+              onClick={() => navigate("/products")}
               className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Cancel

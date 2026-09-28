@@ -2,25 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Search, Edit3, Trash2, Eye, ExternalLink } from "lucide-react";
 import { CMSLayout } from "../components/layout/CMSLayout";
-
-interface Variant {
-  id: string;
-  sku: string;
-  size: string;
-  color: string;
-  stockQty: number;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  slug: string;
-  basePrice: string;
-  isFeatured: boolean;
-  category: { name: string };
-  variants: Variant[];
-  images: { url: string }[];
-}
+import { api, type Product, type Variant } from "../api/client";
 
 export const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -33,8 +15,7 @@ export const ProductsPage: React.FC = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("/api/products");
-      const data = await res.json();
+      const data = await api.getProducts();
       setProducts(data);
     } catch (error) {
       console.error("Failed to load products:", error);
