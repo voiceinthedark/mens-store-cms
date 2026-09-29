@@ -1,6 +1,6 @@
 {
   "name": "@store/api",
-  "version": "0.27.05",
+  "version": "0.28.15",
   "description": "Avantaria women's clothing store API",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,8 @@
   "dependencies": {
     "@store/db": "*",
     "@store/types": "*",
+    "@supabase/supabase-js": "^2.45.4",
     "bcryptjs": "^3.0.3",
-    "cloudinary": "^2.11.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^4.22.3",

@@ -1,5 +1,5 @@
 import { Router, Response } from "express";
-import { upload, uploadToCloudinary } from "../services/upload.service";
+import { upload, uploadToSupabase } from "../services/upload.service";
 import {
   authenticate,
   authorize,
@@ -21,7 +21,7 @@ router.post(
       }
 
       const uploadPromises = files.map((file) =>
-        uploadToCloudinary(file.buffer, "mens-clothing"),
+        uploadToSupabase(file.buffer, file.mimetype, "mens-clothing"),
       );
       const imageUrls = await Promise.all(uploadPromises);
 

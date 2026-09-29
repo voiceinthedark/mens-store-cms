@@ -9,7 +9,9 @@ import { z } from "zod";
  * error instead of crashing unpredictably later at runtime.
  */
 const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
   PORT: z.coerce.number().int().positive().default(5000),
 
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
@@ -18,9 +20,13 @@ const envSchema = z.object({
     .string()
     .min(32, "JWT_SECRET must be at least 32 characters long"),
 
-  CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME is required"),
-  CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY is required"),
-  CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET is required"),
+  // Supabase Storage (image uploads) — replaces Cloudinary, which is
+  // unavailable in some regions.
+  SUPABASE_URL: z.string().url("SUPABASE_URL must be a valid URL"),
+  SUPABASE_SERVICE_ROLE_KEY: z
+    .string()
+    .min(1, "SUPABASE_SERVICE_ROLE_KEY is required"),
+  SUPABASE_STORAGE_BUCKET: z.string().min(1).default("product-images"),
 
   // Temporary shared secret used to bootstrap the very first ADMIN account
   // via POST /api/auth/bootstrap-admin. The route self-disables once any

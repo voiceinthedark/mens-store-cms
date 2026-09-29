@@ -1,16 +1,11 @@
 // filepath: packages/api/src/services/upload.service.ts
 
-import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
+import { randomUUID } from "crypto";
 import { env } from "../config/env";
+import { supabase } from "../utils/supabase";
 
-cloudinary.config({
-  cloud_name: env.CLOUDINARY_CLOUD_NAME,
-  api_key: env.CLOUDINARY_API_KEY,
-  api_secret: env.CLOUDINARY_API_SECRET,
-});
-
-// Memory storage keeps file buffer in RAM for streaming to Cloudinary
+// Memory storage keeps file buffer in RAM for streaming to Supabase Storage
 const storage = multer.memoryStorage();
 
 export const upload = multer({
@@ -25,22 +20,37 @@ export const upload = multer({
   },
 });
 
-export const uploadToCloudinary = (
+/**
+ * Uploads a file buffer to Supabase Storage and returns its public URL.
+ * Replaces the previous Cloudinary-based implementation (Cloudinary is
+ * unavailable in some regions, e.g. Lebanon).
+ *
+ * @param fileBuffer - Raw image bytes from multer's memory storage.
+ * @param mimeType - The file's MIME type (e.g. "image/png").
+ * @param folder - Storage path prefix, e.g. "products".
+ */
+export const uploadToSupabase = async (
   fileBuffer: Buffer,
+  mimeType: string,
   folder: string = "products",
 ): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder,
-        format: "webp",
-        transformation: [{ width: 1200, crop: "limit" }],
-      },
-      (error, result) => {
-        if (error || !result) return reject(error);
-        resolve(result.secure_url);
-      },
-    );
-    uploadStream.end(fileBuffer);
-  });
+  const extension = mimeType.split("/")[1] || "jpg";
+  const path = `${folder}/${randomUUID()}.${extension}`;
+
+  const { error } = await supabase.storage
+    .from(env.SUPABASE_STORAGE_BUCKET)
+    .upload(path, fileBuffer, {
+      contentType: mimeType,
+      upsert: false,
+    });
+
+  if (error) {
+    throw new Error(`Supabase upload failed: ${error.message}`);
+  }
+
+  const { data } = supabase.storage
+    .from(env.SUPABASE_STORAGE_BUCKET)
+    .getPublicUrl(path);
+
+  return data.publicUrl;
 };

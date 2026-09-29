@@ -27,14 +27,15 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "cors": "^2.8.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.2",
-    "typescript": "^5.9.3",
-    "turbo": "^2.11.3"
+    "turbo": "^2.11.3",
+    "typescript": "^5.9.3"
   },
   "allowScripts": {
     "prisma@5.22.0": true,
