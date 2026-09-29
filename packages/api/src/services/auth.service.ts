@@ -37,4 +37,37 @@ export class AuthService {
 
     return { user: userWithoutPassword, token };
   }
+
+  /**
+   * Creates the very first ADMIN user. Intended as a one-time bootstrap
+   * step for a fresh deployment — refuses to run if any ADMIN already
+   * exists, so it's safe to leave the route registered temporarily.
+   */
+  static async bootstrapAdmin(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ) {
+    const existingAdmin = await prisma.user.findFirst({
+      where: { role: 'ADMIN' },
+    });
+    if (existingAdmin) {
+      throw new Error('An admin account already exists');
+    }
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    const user = await prisma.user.create({
+      data: { email, passwordHash, firstName, lastName, role: 'ADMIN' },
+      select: { id: true, email: true, role: true, firstName: true, lastName: true },
+    });
+
+    const token = generateToken({ userId: user.id, role: user.role });
+    return { user, token };
+  }
 }

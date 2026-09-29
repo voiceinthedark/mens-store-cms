@@ -21,6 +21,14 @@ const envSchema = z.object({
   CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME is required"),
   CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY is required"),
   CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET is required"),
+
+  // Temporary shared secret used to bootstrap the very first ADMIN account
+  // via POST /api/auth/bootstrap-admin. The route self-disables once any
+  // ADMIN user already exists, so this can be removed after initial setup.
+  ADMIN_BOOTSTRAP_KEY: z
+    .string()
+    .min(16, "ADMIN_BOOTSTRAP_KEY must be at least 16 characters long")
+    .optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
