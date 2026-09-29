@@ -1,5 +1,9 @@
 import { Router, Response } from "express";
-import { upload, uploadToSupabase } from "../services/upload.service";
+import {
+  upload,
+  uploadToSupabase,
+  deleteFromSupabase,
+} from "../services/upload.service";
 import {
   authenticate,
   authorize,
@@ -28,6 +32,25 @@ router.post(
       res.status(200).json({ urls: imageUrls });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Image upload failed" });
+    }
+  },
+);
+
+router.delete(
+  "/:path/delete",
+  authenticate,
+  authorize(["ADMIN", "STAFF"]),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const { path } = req.params;
+      if (!path) {
+        return res.status(400).json({ error: "Image path is required" });
+      }
+
+      await deleteFromSupabase(path);
+      res.status(200).json({ message: "Image deleted successfully" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Image deletion failed" });
     }
   },
 );

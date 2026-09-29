@@ -1,6 +1,6 @@
 {
   "name": "@store/api",
-  "version": "0.28.15",
+  "version": "0.29.0",
   "description": "Avantaria women's clothing store API",
   "main": "index.js",
   "scripts": {

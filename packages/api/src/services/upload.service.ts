@@ -54,3 +54,18 @@ export const uploadToSupabase = async (
 
   return data.publicUrl;
 };
+
+/**
+ * Deletes a file from Supabase Storage by its path.
+ *
+ * @param path - The storage path of the file to delete (e.g. "products/uuid.jpg").
+ */
+export const deleteFromSupabase = async (path: string): Promise<void> => {
+  const { error } = await supabase.storage
+    .from(env.SUPABASE_STORAGE_BUCKET)
+    .remove([path]);
+
+  if (error) {
+    throw new Error(`Supabase delete failed: ${error.message}`);
+  }
+};
