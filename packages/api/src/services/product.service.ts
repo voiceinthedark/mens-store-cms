@@ -57,11 +57,62 @@ export class ProductService {
     description: string;
     basePrice: number;
     categoryId: string;
+    isFeatured?: boolean;
+    variants?: {
+      sku: string;
+      size: string;
+      color: string;
+      stockQty: number;
+      priceDelta?: number;
+    }[];
+    images?: string[];
   }) {
+    const { variants, images, ...productData } = data;
+
     return prisma.product.create({
-      data,
-      include: { category: true },
+      data: {
+        ...productData,
+        variants: variants?.length ? { create: variants } : undefined,
+        images: images?.length
+          ? { create: images.map((url) => ({ url })) }
+          : undefined,
+      },
+      include: { category: true, variants: true, images: true },
     });
+  }
+
+  /** Fetches a single product by its id, including its category,
+   * variants, and images. Used by admin/CMS edit views. */
+  static async getProductById(id: string) {
+    return prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: true,
+        variants: true,
+        images: true,
+      },
+    });
+  }
+
+  static async updateProduct(
+    id: string,
+    data: {
+      name?: string;
+      description?: string;
+      basePrice?: number;
+      categoryId?: string;
+      isFeatured?: boolean;
+    },
+  ) {
+    return prisma.product.update({
+      where: { id },
+      data,
+      include: { category: true, variants: true, images: true },
+    });
+  }
+
+  static async deleteProduct(id: string) {
+    return prisma.product.delete({ where: { id } });
   }
 
   /** Fetches a single product by its slug, including its category,
