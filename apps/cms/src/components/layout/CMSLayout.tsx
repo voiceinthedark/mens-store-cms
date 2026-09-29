@@ -13,6 +13,7 @@ import { MobileTopNavigation } from "../ui/MobileTopNavigation";
 import { MobileSlideOutDrawer } from "../ui/MobileSlideOutDrawer";
 import { DesktopSideBar } from "../ui/DesktopSideBar";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface CMSLayoutProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ interface CMSLayoutProps {
 
 export const CMSLayout: React.FC<CMSLayoutProps> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const navItems = [
     { label: "Dashboard", icon: LayoutDashboard, href: "/" },
@@ -45,7 +47,7 @@ export const CMSLayout: React.FC<CMSLayoutProps> = ({ children }) => {
       )}
 
       {/* Desktop Sidebar */}
-      <DesktopSideBar navItems={navItems} />
+      <DesktopSideBar navItems={navItems} user={user} onLogout={logout} />
 
       {/* Main Content Area */}
       <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full pb-20 md:pb-8">

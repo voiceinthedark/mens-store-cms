@@ -1,12 +1,30 @@
 // filepath: apps/cms/src/api/client.ts
 
 const API_BASE = "/api";
+const TOKEN_KEY = "cms_token";
+
+export const tokenStorage = {
+  get: () => localStorage.getItem(TOKEN_KEY),
+  set: (token: string) => localStorage.setItem(TOKEN_KEY, token),
+  clear: () => localStorage.removeItem(TOKEN_KEY),
+};
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = tokenStorage.get();
+
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
     ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options?.headers,
+    },
   });
+
+  if (res.status === 401) {
+    tokenStorage.clear();
+    window.dispatchEvent(new Event("auth:unauthorized"));
+  }
 
   if (!res.ok) {
     const message = await res.text().catch(() => res.statusText);
@@ -54,7 +72,27 @@ export interface Order {
   total: string;
 }
 
+export interface AuthUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: "CUSTOMER" | "ADMIN" | "STAFF";
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+  token: string;
+}
+
 export const api = {
+  // Auth
+  login: (email: string, password: string) =>
+    request<AuthResponse>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    }),
+
   // Products
   getProducts: () => request<Product[]>("/products"),
   getProduct: (id: string) => request<Product>(`/products/${id}`),
@@ -79,10 +117,12 @@ export const api = {
 
   // Media
   uploadImages: async (files: File[]): Promise<{ urls: string[] }> => {
+    const token = tokenStorage.get();
     const formData = new FormData();
     files.forEach((file) => formData.append("images", file));
     const res = await fetch(`${API_BASE}/upload`, {
       method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       body: formData,
     });
     if (!res.ok) throw new Error("Failed to upload images");
